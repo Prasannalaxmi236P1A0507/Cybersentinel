@@ -154,6 +154,15 @@ CyberSentinel bridges the gap between traditional rule-based systems and modern 
 
 ---
 
+## 📂 Project Documents
+
+- 📄 **Project Report**: [Download Report](docs/report.pdf)  
+- 📊 **Project Presentation**: [View Presentation](docs/presentation.pptx)  
+
+👉 *If files do not preview in GitHub, please download and open locally.*
+
+---
+
 ## 👩‍💻 Team Members
 
 * A. Prasanna Laxmi (Team Lead)

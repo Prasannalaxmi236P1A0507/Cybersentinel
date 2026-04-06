@@ -1,0 +1,11 @@
+ip,packet_count,failed_logins,session_duration,threat_level,agent_response,why_risky,attack_type,timestamp
+192.168.1.10,120,0,30,LOW,No Action Needed,Normal traffic behaviour,Normal,2026-04-01 18:34:15
+192.168.1.12,3000,12,5,LOW,No Action Needed,Normal traffic behaviour,Normal,2026-04-01 18:34:15
+192.168.1.15,150,1,40,LOW,No Action Needed,Normal traffic behaviour,Normal,2026-04-01 18:34:15
+192.168.1.20,5000,20,2,HIGH,Block IP & Investigate,Multiple failed login attempts detected,Brute Force Attack,2026-04-01 18:34:15
+192.168.1.25,100,0,35,LOW,No Action Needed,Normal traffic behaviour,Normal,2026-04-01 18:34:15
+192.168.1.30,7000,25,1,HIGH,Block IP & Isolate System,Extremely high packet traffic detected,Possible DDoS Attack,2026-04-01 18:34:15
+192.168.1.45,4500,15,3,MEDIUM,Monitor Traffic,Unusual traffic spike detected,Suspicious Activity,2026-04-01 18:34:15
+192.168.1.50,6000,18,2,HIGH,Block IP & Isolate System,Extremely high packet traffic detected,Possible DDoS Attack,2026-04-01 18:34:15
+192.168.1.70,200,0,20,LOW,No Action Needed,Normal traffic behaviour,Normal,2026-04-01 18:34:15
+192.168.1.80,3500,8,10,MEDIUM,Monitor Traffic,Unusual traffic spike detected,Suspicious Activity,2026-04-01 18:34:15

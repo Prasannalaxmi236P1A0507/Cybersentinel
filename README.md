@@ -157,7 +157,7 @@ CyberSentinel bridges the gap between traditional rule-based systems and modern 
 ## 📂 Project Documents
 
 - 📄 **Project Report**: [Download Report](docs/report.pdf)  
-- 📊 **Project Presentation**: [View Presentation](docs/presentation.pptx)  
+- 📊 **Project Presentation**: [View Presentation](docs/presentation.pdf)  
 
 👉 *If files do not preview in GitHub, please download and open locally.*
 

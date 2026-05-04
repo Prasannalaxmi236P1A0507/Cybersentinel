@@ -1,14 +1,29 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-def preprocess_data(file_path):
-    data = pd.read_csv(file_path)
+def preprocess_data(file):
 
-    # Select numerical features
-    features = data[['packet_count', 'failed_logins', 'session_duration']]
+    # Handle both uploaded file (Streamlit) and file path
+    if hasattr(file, "read"):
+        data = pd.read_csv(file)
+    else:
+        data = pd.read_csv(file)
 
-    # Normalize features
+    # Keep original data
+    original_data = data.copy()
+
+    # Select only numeric columns for ML
+    numeric_data = data.select_dtypes(include=['number'])
+
+    # Handle case if no numeric data
+    if numeric_data.empty:
+        raise ValueError("No numeric columns found in dataset")
+
+    # Fill missing values
+    numeric_data = numeric_data.fillna(numeric_data.mean())
+
+    # Scale data
     scaler = StandardScaler()
-    scaled_features = scaler.fit_transform(features)
+    scaled_data = scaler.fit_transform(numeric_data)
 
-    return scaled_features, data
+    return scaled_data, original_data

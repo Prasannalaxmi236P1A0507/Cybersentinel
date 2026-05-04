@@ -20,94 +20,99 @@ uploaded_file = st.file_uploader("📂 Upload Network Logs CSV", type=["csv"])
 
 if uploaded_file is not None:
 
-    # Loading spinner
-    with st.spinner("🔍 Analyzing network logs..."):
+    try:
+        with st.spinner("🔍 Analyzing network logs..."):
 
-        # Read data
-        data = pd.read_csv(uploaded_file)
+            # Read uploaded file (for preview)
+            data = pd.read_csv(uploaded_file)
 
-        st.subheader("📄 Uploaded Data Preview")
-        st.dataframe(data.head())
+            st.subheader("📄 Uploaded Data Preview")
+            st.dataframe(data.head())
 
-        # Preprocess
-        scaled_data, original_data = preprocess_data(uploaded_file)
+            # Reset file pointer (VERY IMPORTANT)
+            uploaded_file.seek(0)
 
-        # Train model
-        model = train_model(scaled_data)
+            # Preprocess data
+            scaled_data, original_data = preprocess_data(uploaded_file)
 
-        # Detect anomalies
-        predictions = detect_anomalies(model, scaled_data)
+            # Train model
+            model = train_model(scaled_data)
 
-        # Map results
-        original_data['threat_status'] = predictions
-        original_data['threat_status'] = original_data['threat_status'].map({
-            1: "Normal",
-            -1: "Suspicious"
-        })
+            # Detect anomalies
+            predictions = detect_anomalies(model, scaled_data)
 
-        # Agent decisions
-        threat_levels = []
-        responses = []
+            # Map results
+            original_data['threat_status'] = predictions
+            original_data['threat_status'] = original_data['threat_status'].map({
+                1: "Normal",
+                -1: "Suspicious"
+            })
 
-        for _, row in original_data.iterrows():
-            level, action = agent_decision(row)
-            threat_levels.append(level)
-            responses.append(action)
+            # Agent decisions
+            threat_levels = []
+            responses = []
 
-        original_data['threat_level'] = threat_levels
-        original_data['agent_response'] = responses
+            for _, row in original_data.iterrows():
+                level, action = agent_decision(row)
+                threat_levels.append(level)
+                responses.append(action)
 
-    # Success message
-    st.success("✅ Analysis Completed Successfully!")
+            original_data['threat_level'] = threat_levels
+            original_data['agent_response'] = responses
 
-    # ================= KPI METRICS =================
-    total = len(original_data)
-    normal = (original_data['threat_status'] == "Normal").sum()
-    suspicious = (original_data['threat_status'] == "Suspicious").sum()
+        st.success("✅ Analysis Completed Successfully!")
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("📊 Total Logs", total)
-    col2.metric("✅ Normal", normal)
-    col3.metric("🚨 Suspicious", suspicious)
+        # ================= KPI METRICS =================
+        total = len(original_data)
+        normal = (original_data['threat_status'] == "Normal").sum()
+        suspicious = (original_data['threat_status'] == "Suspicious").sum()
 
-    # ================= CHARTS =================
-    col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
+        col1.metric("📊 Total Logs", total)
+        col2.metric("✅ Normal", normal)
+        col3.metric("🚨 Suspicious", suspicious)
 
-    with col1:
-        st.subheader("📊 Threat Status Distribution")
-        st.bar_chart(original_data['threat_status'].value_counts())
+        # ================= CHARTS =================
+        col1, col2 = st.columns(2)
 
-    with col2:
-        st.subheader("⚠️ Threat Level Distribution")
-        st.bar_chart(original_data['threat_level'].value_counts())
+        with col1:
+            st.subheader("📊 Threat Status Distribution")
+            st.bar_chart(original_data['threat_status'].value_counts())
 
-    # ================= FILTER =================
-    st.subheader("🔍 Filter Results")
+        with col2:
+            st.subheader("⚠️ Threat Level Distribution")
+            st.bar_chart(original_data['threat_level'].value_counts())
 
-    filter_option = st.selectbox(
-        "Filter Threats",
-        ["All", "Normal", "Suspicious"]
-    )
+        # ================= FILTER =================
+        st.subheader("🔍 Filter Results")
 
-    if filter_option != "All":
-        filtered_data = original_data[
-            original_data['threat_status'] == filter_option
-        ]
-    else:
-        filtered_data = original_data
+        filter_option = st.selectbox(
+            "Filter Threats",
+            ["All", "Normal", "Suspicious"]
+        )
 
-    # ================= TABLE =================
-    st.subheader("📋 Detailed Results")
-    st.dataframe(filtered_data)
+        if filter_option != "All":
+            filtered_data = original_data[
+                original_data['threat_status'] == filter_option
+            ]
+        else:
+            filtered_data = original_data
 
-    # ================= DOWNLOAD =================
-    csv = original_data.to_csv(index=False).encode('utf-8')
-    st.download_button(
-        "⬇️ Download Results",
-        csv,
-        "threat_results.csv",
-        "text/csv"
-    )
+        # ================= TABLE =================
+        st.subheader("📋 Detailed Results")
+        st.dataframe(filtered_data)
+
+        # ================= DOWNLOAD =================
+        csv = original_data.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            "⬇️ Download Results",
+            csv,
+            "threat_results.csv",
+            "text/csv"
+        )
+
+    except Exception as e:
+        st.error(f"❌ Error: {e}")
 
 else:
     st.warning("⚠️ Please upload a CSV file to start analysis")

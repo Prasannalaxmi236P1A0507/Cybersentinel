@@ -11,21 +11,8 @@ st.set_page_config(
     page_title="CyberSentinel",
     layout="wide"
 )
-import streamlit as st
-import plotly.express as px
-import pandas as pd
 
-from preprocessing.preprocess import preprocess_data
-from model.anomaly_model import train_model, detect_anomalies
-from agent.threat_agent import agent_decision
-
-# Page config
-st.set_page_config(
-    page_title="CyberSentinel",
-    layout="wide"
-)
-
-# ADD THIS HERE 👇
+# Hide streamlit UI elements
 st.markdown("""
 <style>
 #MainMenu {visibility:hidden;}
@@ -34,10 +21,6 @@ header {visibility:hidden;}
 [data-testid="stToolbar"] {display:none;}
 </style>
 """, unsafe_allow_html=True)
-
-# Title
-st.title("🔐 CyberSentinel - AI Threat Detection System")
-st.markdown("### 🚀 Autonomous Security Operations Dashboard")
 
 # ================= TITLE =================
 st.title("🔐 CyberSentinel - AI Threat Detection System")
